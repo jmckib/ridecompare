@@ -44,6 +44,9 @@
             <li>Bootstrap v3.3.6</li>
             <li>jQuery v2.2.4</li>
           </ul>
+
+		  <input id="input-start" class="controls" type="text" placeholder="STARTING POINT">
+		  <input id="input-dest" class="controls" type="text" placeholder="DESTINATION">
         </div>
       </div>
       <!-- /.row -->
@@ -57,6 +60,53 @@
     <!-- Bootstrap Core JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
 
+	<!-- Google Maps API -->
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDZZSkbGU3PhEdQPKnVpsEFt-c9KNjm3yQ&libraries=places"></script>
+
+	<script>
+	 var input_start = document.getElementById('input-start');
+	 var input_dest = document.getElementById('input-dest');
+
+	 var start = null;
+	 var dest = null;
+	 var directions = null;
+
+	 function get_directions() {
+		 var directions_service = new google.maps.DirectionsService();
+		 directions_service.route({
+			 origin: {'placeId': start.place_id},
+			 destination: {'placeId': dest.place_id},
+			 travelMode: google.maps.TravelMode.DRIVING
+		 }, function(response, status) {
+			 if (status === google.maps.DirectionsStatus.OK) {
+				 directions = response;
+				 console.log(directions);
+			 } else {
+				 window.alert('Directions request failed due to ' + status);
+			 }
+		 });
+	 }
+
+	 var autocomplete_start = new google.maps.places.Autocomplete(input_start);
+	 autocomplete_start.addListener('place_changed', function() {
+		 start = autocomplete_start.getPlace();
+		 console.log(start);
+
+		 if (start && dest) {
+			 get_directions();
+		 }
+	 });
+
+	 var autocomplete_dest = new google.maps.places.Autocomplete(input_dest);
+	 autocomplete_dest.addListener('place_changed', function() {
+		 dest = autocomplete_dest.getPlace();
+		 console.log(dest);
+		 if (start && dest) {
+			 get_directions();
+		 }
+	 });
+
+	</script>
   </body>
 
 </html>
