@@ -49,6 +49,11 @@
 		  <input id="input-dest" class="controls" type="text" placeholder="DESTINATION">
         </div>
       </div>
+	  <div class="row">
+		<div class="col-lg-12 text-center">
+		  <div id="results"></div>
+		</div>
+	  </div>
       <!-- /.row -->
 
     </div>
@@ -69,9 +74,13 @@
 
 	 var start = null;
 	 var dest = null;
-	 var directions = null;
+	 var $div_results = $('div#results');
 
 	 function get_directions() {
+		 if (!start || !dest) {
+			 return;
+		 }
+
 		 var directions_service = new google.maps.DirectionsService();
 		 directions_service.route({
 			 origin: {'placeId': start.place_id},
@@ -79,8 +88,11 @@
 			 travelMode: google.maps.TravelMode.DRIVING
 		 }, function(response, status) {
 			 if (status === google.maps.DirectionsStatus.OK) {
-				 directions = response;
-				 console.log(directions);
+				 var directions = response.routes[0].legs[0];
+				 var miles = directions.distance.value / 1609.34;  // value in meters
+				 var minutes = directions.duration.value / 60.0;  // value in seconds
+				 var lyft_cost = (1.75 + Math.max(.90 + .12 * minutes + .78 * miles, 6)).toFixed(2);
+				 $div_results.html("<strong>Lyft Standard: " + lyft_cost);
 			 } else {
 				 window.alert('Directions request failed due to ' + status);
 			 }
@@ -90,20 +102,13 @@
 	 var autocomplete_start = new google.maps.places.Autocomplete(input_start);
 	 autocomplete_start.addListener('place_changed', function() {
 		 start = autocomplete_start.getPlace();
-		 console.log(start);
-
-		 if (start && dest) {
-			 get_directions();
-		 }
+		 get_directions();
 	 });
 
 	 var autocomplete_dest = new google.maps.places.Autocomplete(input_dest);
 	 autocomplete_dest.addListener('place_changed', function() {
 		 dest = autocomplete_dest.getPlace();
-		 console.log(dest);
-		 if (start && dest) {
-			 get_directions();
-		 }
+		 get_directions();
 	 });
 
 	</script>
