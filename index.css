@@ -1,0 +1,31 @@
+body {
+	padding-top: 70px;
+    /* Required padding for .navbar-fixed-top. Remove if using .navbar-static-top. Change if height of navigation changes. */
+}
+
+/* CSS needed for responsive Google Map div with Bootstrap */
+#map-container{
+	position: relative;
+	width: 100%;
+	padding-bottom: 56.25%; /* Ratio 16:9 ( 100%/16*9 = 56.25% ) */
+}
+#map-container #map{
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	margin: 0;
+	padding: 0;
+}
+
+
+#pickup-addon {
+	padding: 0 25.5px;
+}
+#result {
+	font-size: 27px;
+}
+.fare-result {
+	font-size: 20px;
+}
