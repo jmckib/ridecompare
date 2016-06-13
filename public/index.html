@@ -85,9 +85,11 @@
 	  </div>
 	  <div class="row">
 		<div class="col-xs-12 col-md-8 col-md-offset-2">
-		  <div id="map-container">
-			<div id="map" style="display: none;"></div>
+		  <div id="map-container" style="display: none;">
+			<div id="map"></div>
 		  </div>
+		  <p><small>*Does not take surge pricing into account. Generally, the app with the lowest surge pricing will have the lowest fare.</small></p>
+		  <p><small>*Our fare estimate is based on estimated distance and time using Google Maps. Your fare may be different if traffic conditions change or your driver takes a different route.</small></p>
 		</div>
 	  </div>
       <!-- /.row -->
@@ -116,8 +118,7 @@
 
 	 var directions_service = new google.maps.DirectionsService;
 	 var directionsDisplay = new google.maps.DirectionsRenderer;
-	 var $map = $('#map');
-	 var map = new google.maps.Map($map[0], {
+	 var map = new google.maps.Map(document.getElementById('map'), {
 		 zoom: 7,
 		 center: {lat: 41.85, lng: -87.65}
 	 });
@@ -168,7 +169,7 @@
 				 $uber_result.html(uber_string + ": $" + uber_cost);
 
 				 directionsDisplay.setDirections(response);
-				 $map.show();
+				 $('#map-container').show();
 				 google.maps.event.trigger(map, 'resize');
 			 } else {
 				 window.alert('Directions request failed due to ' + status);
